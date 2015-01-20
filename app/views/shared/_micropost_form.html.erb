@@ -1,7 +1,16 @@
+<%= javascript_include_tag "micropost_size_checker" %>
 <%= form_for(@micropost) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
   <div class="field">
-    <%= f.text_area :content, placeholder: "Compose new micropost..." %>
+      <%= f.text_area :content,  placeholder: "Compose new micropost...", :oninput => ("
+	      remains = 140-document.getElementById('micropost_content').value.length;
+	      if(remains<0){
+	      	document.getElementById('micropost_content').value=document.getElementById('micropost_content').value.slice(0,140);
+	      	remains=0;
+	      }
+	      document.getElementById('micropost_size_left').innerHTML=remains+\" left\";
+      ") %>
+  <%= f.label :content, "140 left", id: "micropost_size_left" %>
   </div>
   <%= f.submit "Post", class: "btn btn-large btn-primary" %>
 <% end %>
